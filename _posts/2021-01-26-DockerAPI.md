@@ -758,7 +758,10 @@ go func() {
 
 <br><br>
 
-func (*Client) NodeList
+func (*Client) NodeList <br>
+func (*Client) SecretListb <br>
+func (*Client) ServiceList <br>
+func (*Client) TaskList <br>
 
 <br>
 
