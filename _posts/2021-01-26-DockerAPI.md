@@ -49,7 +49,7 @@ func main() {
 ```
 
 
-이 예시에 활용된 ContainerList가 api 인데, Go로 작성되어 활용할 수 있는 api list는 [이곳](https://godoc.org/github.com/docker/docker/client) 에서 확인할 수 있다.
+이 예시에 활용된 ContainerList가 api 인데, Go로 작성되어 활용할 수 있는 api list는 [이곳](https://pkg.go.dev/github.com/docker/docker/client) 에서 확인할 수 있다.
 
 <br><br>
 
@@ -108,7 +108,7 @@ container가 시작된 이후 filesystem의 변화
 go func() {
 		defer w.Done()
 		var changes []container.ContainerChangeResponseItem
-		changes, err := cli.ContainerDiff(ctx, "7e03a3c395de")
+		changes, err := cli.ContainerDiff(ctx, "f425bc67365a")
 		if err != nil {
 			panic(err)
 		}
@@ -119,7 +119,20 @@ go func() {
 ```
 
 ```bash
-null
+[
+	{
+		"Kind": 0,
+		"Path": "/var"
+	},
+	{
+		"Kind": 0,
+		"Path": "/var/lib"
+	},
+	{
+		"Kind": 1,
+		"Path": "/var/lib/registry"
+	}
+]
 ```
 
 <br><br>
@@ -369,6 +382,61 @@ go func() {
 	}
 }
 ```
+
+<br><br>
+
+func (*Client) ContainerList<br>
+docker ps 와 동일
+
+```go
+	go func() {
+		defer w.Done()
+		containers, err := cli.ContainerList(ctx, types.ContainerListOptions{})
+		for _, container := range containers {
+			fmt.Println(container.ID)
+		}
+		if err != nil {
+			panic(err)
+		}
+	}()
+```
+
+```bash
+2e24db742d5620139d27b3ce2c4e853da951d74e92682d14fdb5e7bda41ca760
+```
+
+<br><br>
+
+func (*Client) ContainerLogs<br>
+특정 컨테이너 로그 출력
+
+```go
+	go func() {
+		defer w.Done()
+		options := types.ContainerLogsOptions{ShowStdout: true}
+		out, err := cli.ContainerLogs(ctx, "7e03a3c395de", options)
+		io.Copy(os.Stdout, out)
+		if err != nil {
+			panic(err)
+		}
+	}()
+```
+
+```bash
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+ /___/\__/_//_/\___/ v3.3.10-dev
+.High performance, minimalist Go web framework
+https://echo.labstack.com
+.____________________________________O/_______
+.                                    O\
+%⇨ http server started on [::]:1322
+```
+
+
+
 
 
 
