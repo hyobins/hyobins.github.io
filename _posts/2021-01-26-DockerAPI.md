@@ -595,6 +595,175 @@ go func() {
 "BuilderSize": 0
 ```
 
+<br><br>
+
+func (*Client) Info<br>
+current data usage from the daemon 리턴
+
+```go
+go func() {
+    defer w.Done()
+    info, err := cli.Info(ctx)
+    if err != nil {
+        panic(err)
+    }
+    doc, _ := json.MarshalIndent(info, "", "    ")
+    fmt.Println(string(doc))
+}()
+```
+
+```bash
+{
+	"ID": "PWJX:UJNB:2KEG:3UYL:WNSK:XDFS:VP5R:BOOW:2D3A:3EZJ:TQFU:AJSZ",
+	"Containers": 2,
+	"ContainersRunning": 2,
+	"ContainersPaused": 0,
+	"ContainersStopped": 0,
+	"Images": 201,
+	"Driver": "overlay2",
+	"DriverStatus": [
+		[
+			"Backing Filesystem",
+			"\u003cunknown\u003e"
+		],
+		[
+			"Supports d_type",
+			"true"
+		],
+		[
+			"Native Overlay Diff",
+			"true"
+		]
+	],
+	"Plugins": {
+		"Volume": [
+			"local"
+		],
+		"Network": [
+			"bridge",
+			"host",
+			"ipvlan",
+			"macvlan",
+			"null",
+			"overlay"
+		],
+		"Authorization": null,
+		"Log": [
+			"awslogs",
+			"fluentd",
+			"gcplogs",
+			"gelf",
+			"journald",
+			"json-file",
+			"local",
+			"logentries",
+			"splunk",
+			"syslog"
+		]
+	},
+	"MemoryLimit": true,
+	"SwapLimit": true,
+	"KernelMemory": true,
+	"KernelMemoryTCP": true,
+	"CpuCfsPeriod": true,
+	"CpuCfsQuota": true,
+	"CPUShares": true,
+	"CPUSet": true,
+	"PidsLimit": true,
+	"IPv4Forwarding": true,
+	"BridgeNfIptables": true,
+	"BridgeNfIp6tables": true,
+	"Debug": false,
+	"NFd": 41,
+	"OomKillDisable": true,
+	"NGoroutines": 53,
+	"SystemTime": "2021-01-26T15:40:33.2325057+09:00",
+	"LoggingDriver": "json-file",
+	"CgroupDriver": "systemd",
+	"NEventsListener": 0,
+	"KernelVersion": "3.10.0-1062.12.1.el7.x86_64",
+	"OperatingSystem": "CentOS Linux 7 (Core)",
+	"OSVersion": "",
+	"OSType": "linux",
+	"Architecture": "x86_64",
+	"IndexServerAddress": "https://index.docker.io/v1/",
+	"RegistryConfig": {
+		"AllowNondistributableArtifactsCIDRs": [],
+		"AllowNondistributableArtifactsHostnames": [],
+		"InsecureRegistryCIDRs": [
+			"127.0.0.0/8"
+		],
+		"IndexConfigs": {
+			"192.168.102.142:5002": {
+				"Name": "192.168.102.142:5002",
+				"Mirrors": [],
+				"Secure": false,
+				"Official": false
+			},
+			"docker.io": {
+				"Name": "docker.io",
+				"Mirrors": [],
+				"Secure": true,
+				"Official": true
+			}
+		},
+		"Mirrors": []
+	},
+	"NCPU": 16,
+	"MemTotal": 67557842944,
+	"GenericResources": null,
+	"DockerRootDir": "/var/lib/docker",
+	"HttpProxy": "",
+	"HttpsProxy": "",
+	"NoProxy": "",
+	"Name": "k8s-dev",
+	"Labels": [],
+	"ExperimentalBuild": false,
+	"ServerVersion": "19.03.8",
+	"Runtimes": {
+		"runc": {
+			"path": "runc"
+		}
+	},
+	"DefaultRuntime": "runc",
+	"Swarm": {
+		"NodeID": "",
+		"NodeAddr": "",
+		"LocalNodeState": "inactive",
+		"ControlAvailable": false,
+		"Error": "",
+		"RemoteManagers": null
+	},
+	"LiveRestoreEnabled": false,
+	"Isolation": "",
+	"InitBinary": "docker-init",
+	"ContainerdCommit": {
+		"ID": "7ad184331fa3e55e52b890ea95e65ba581ae3429",
+		"Expected": "7ad184331fa3e55e52b890ea95e65ba581ae3429"
+	},
+	"RuncCommit": {
+		"ID": "dc9208a3303feef5b3839f4323d9beb36df0a9dd",
+		"Expected": "dc9208a3303feef5b3839f4323d9beb36df0a9dd"
+	},
+	"InitCommit": {
+		"ID": "fec3683",
+		"Expected": "fec3683"
+	},
+	"SecurityOptions": [
+		"name=seccomp,profile=default"
+	],
+	"Warnings": null
+}
+```
+
+<br><br>
+
+func (*Client) NodeList
+
+<br>
+
+panic: Error response from daemon: This node is not a swarm manager. Use "docker swarm init" or "docker swarm join" to connect this node to swarm and try again.
+
 
 
 
