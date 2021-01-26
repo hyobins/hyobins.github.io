@@ -51,11 +51,11 @@ func main() {
 
 이 예시에 활용된 ContainerList가 api 인데, Go로 작성되어 활용할 수 있는 api list는 [이곳](https://godoc.org/github.com/docker/docker/client) 에서 확인할 수 있다.
 
-<br>
+<br><br>
 
 ## 컨테이너 정보를 출력해주는 api/결과값 정리
 
-아래 예시들은 go routine을 활용하였으므로 코드내에 waitGroup을 이용하여 wait 처리를 해주어야 한다. <br>
+아래 예시들은 go routine을 활용하였으므로 코드내에 waitGroup을 이용하여 wait 처리를 해주어야 한다. <br><br>
 
 
 func (*Client) CheckpointList<br>
@@ -98,6 +98,66 @@ go func() {
 ```bash
 "1.41"
 ```
+
+<br><br>
+
+func (*Client) ContainerDiff<br>
+container가 시작된 이후 filesystem의 변화
+
+```go
+go func() {
+		defer w.Done()
+		var changes []container.ContainerChangeResponseItem
+		changes, err := cli.ContainerDiff(ctx, "7e03a3c395de")
+		if err != nil {
+			panic(err)
+		}
+
+		doc, _ := json.MarshalIndent(changes, "", "	")
+		fmt.Println(string(doc))
+	}()
+```
+
+```bash
+null
+```
+
+<br><br>
+
+func (*Client) ContainerExecInspect<br>
+information about a specific exec process on the docker host.
+
+```go
+go func() {
+		defer w.Done()
+		var resp types.ContainerExecInspect
+		resp, err := cli.ContainerExecInspect(ctx, "6f5960472a04efba239e223f31fa84c99145db430a20321cd36f3bfcbd4f1b66")
+		if err != nil {
+			panic(err)
+		}
+
+		doc, _ := json.MarshalIndent(resp, "", "	")
+		fmt.Println(string(doc))
+	}()
+```
+
+```bash
+{
+	"ID": "6f5960472a04efba239e223f31fa84c99145db430a20321cd36f3bfcbd4f1b66",
+	"ContainerID": "2e24db742d5620139d27b3ce2c4e853da951d74e92682d14fdb5e7bda41ca760",
+	"Running": false,
+	"ExitCode": 0,
+	"Pid": 1942
+}
+```
+
+
+
+
+
+
+
+
 
 
 
