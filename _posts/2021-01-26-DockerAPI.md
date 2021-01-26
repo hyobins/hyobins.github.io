@@ -63,17 +63,19 @@ func (*Client) CheckpointList<br>
 
 ```go
 go func() {
-		defer w.Done()
-		var checkpoints []types.Checkpoint
-		options := types.CheckpointListOptions{}
-		checkpoints, err := cli.CheckpointList(ctx, "7e03a3c395de", options)
-		if err != nil {
-			panic(err)
-		}
-		doc, _ := json.MarshalIndent(checkpoints, "", "    ")
-		fmt.Println(string(doc))
-	}()
+    defer w.Done()
+    var checkpoints []types.Checkpoint
+    options := types.CheckpointListOptions{}
+    checkpoints, err := cli.CheckpointList(ctx, "7e03a3c395de", options)
+    if err != nil {
+        panic(err)
+    }
+    doc, _ := json.MarshalIndent(checkpoints, "", "    ")
+    fmt.Println(string(doc))
+}()
 ```
+
+이 예시는 "experimental": true 옵션을 추가해주어야 한다.
 
 ```bash
 null
@@ -86,13 +88,13 @@ client가 사용하고있는 api version return
 
 ```go
 go func() {
-		defer w.Done()
-		var clientversion string
-		clientversion = cli.ClientVersion()
+    defer w.Done()
+    var clientversion string
+    clientversion = cli.ClientVersion()
 
-		doc, _ := json.MarshalIndent(clientversion, "", "    ")
-		fmt.Println(string(doc))
-	}()
+    doc, _ := json.MarshalIndent(clientversion, "", "    ")
+    fmt.Println(string(doc))
+}()
 ```
 
 ```bash
@@ -106,16 +108,16 @@ container가 시작된 이후 filesystem의 변화
 
 ```go
 go func() {
-		defer w.Done()
-		var changes []container.ContainerChangeResponseItem
-		changes, err := cli.ContainerDiff(ctx, "f425bc67365a")
-		if err != nil {
-			panic(err)
-		}
+    defer w.Done()
+    var changes []container.ContainerChangeResponseItem
+    changes, err := cli.ContainerDiff(ctx, "f425bc67365a")
+    if err != nil {
+        panic(err)
+    }
 
-		doc, _ := json.MarshalIndent(changes, "", "	")
-		fmt.Println(string(doc))
-	}()
+    doc, _ := json.MarshalIndent(changes, "", "	")
+    fmt.Println(string(doc))
+}()
 ```
 
 ```bash
@@ -138,20 +140,20 @@ go func() {
 <br><br>
 
 func (*Client) ContainerExecInspect<br>
-information about a specific exec process on the docker host.
+information about a specific exec process on the docker host
 
 ```go
 go func() {
-		defer w.Done()
-		var resp types.ContainerExecInspect
-		resp, err := cli.ContainerExecInspect(ctx, "6f5960472a04efba239e223f31fa84c99145db430a20321cd36f3bfcbd4f1b66")
-		if err != nil {
-			panic(err)
-		}
+    defer w.Done()
+    var resp types.ContainerExecInspect
+    resp, err := cli.ContainerExecInspect(ctx, "6f5960472a04efba239e223f31fa84c99145db430a20321cd36f3bfcbd4f1b66")
+    if err != nil {
+        panic(err)
+    }
 
-		doc, _ := json.MarshalIndent(resp, "", "	")
-		fmt.Println(string(doc))
-	}()
+    doc, _ := json.MarshalIndent(resp, "", "	")
+    fmt.Println(string(doc))
+}()
 ```
 
 ```bash
@@ -166,18 +168,18 @@ go func() {
 
 <br><br>
 func (*Client) ContainerInspect<br>
-container information
+container information 리턴 
 
 ```go
 go func() {
-		defer w.Done()
-		resp, err := cli.ContainerInspect(ctx, "2e24db742d56")
-		if err != nil {
-			panic(err)
-		}
-		doc, _ := json.MarshalIndent(resp, "", "	")
-		fmt.Println(string(doc))
-	}()
+    defer w.Done()
+    resp, err := cli.ContainerInspect(ctx, "2e24db742d56")
+    if err != nil {
+        panic(err)
+    }
+    doc, _ := json.MarshalIndent(resp, "", "	")
+    fmt.Println(string(doc))
+}()
 ```
 
 ```bash
@@ -389,16 +391,16 @@ func (*Client) ContainerList<br>
 docker ps 와 동일
 
 ```go
-	go func() {
-		defer w.Done()
-		containers, err := cli.ContainerList(ctx, types.ContainerListOptions{})
-		for _, container := range containers {
-			fmt.Println(container.ID)
-		}
-		if err != nil {
-			panic(err)
-		}
-	}()
+go func() {
+    defer w.Done()
+    containers, err := cli.ContainerList(ctx, types.ContainerListOptions{})
+    for _, container := range containers {
+        fmt.Println(container.ID)
+    }
+    if err != nil {
+        panic(err)
+    }
+}()
 ```
 
 ```bash
@@ -411,15 +413,15 @@ func (*Client) ContainerLogs<br>
 특정 컨테이너 로그 출력
 
 ```go
-	go func() {
-		defer w.Done()
-		options := types.ContainerLogsOptions{ShowStdout: true}
-		out, err := cli.ContainerLogs(ctx, "7e03a3c395de", options)
-		io.Copy(os.Stdout, out)
-		if err != nil {
-			panic(err)
-		}
-	}()
+go func() {
+    defer w.Done()
+    options := types.ContainerLogsOptions{ShowStdout: true}
+    out, err := cli.ContainerLogs(ctx, "7e03a3c395de", options)
+    io.Copy(os.Stdout, out)
+    if err != nil {
+        panic(err)
+    }
+}()
 ```
 
 ```bash
@@ -434,6 +436,167 @@ https://echo.labstack.com
 .                                    O\
 %⇨ http server started on [::]:1322
 ```
+
+<br><br>
+
+
+func (*Client) DaemonHost<br>
+host address used by the client 리턴
+
+```go
+go func() {
+    defer w.Done()
+    d := cli.DaemonHost()
+    doc, _ := json.MarshalIndent(d, "", "	")
+    fmt.Println(string(doc))
+}()
+```
+
+```bash
+"unix:///var/run/docker.sock"
+```
+
+
+<br><br>
+
+
+
+func (*Client) DiskUsage<br>
+current data usage from the daemon 리턴
+
+```go
+go func() {
+    defer w.Done()
+    var du types.DiskUsage
+    du, err := cli.DiskUsage(ctx)
+    if err != nil {
+        panic(err)
+    }
+    doc, _ := json.MarshalIndent(du, "", "    ")
+    fmt.Println("-------------------------------------------\n[disk usage]")
+    fmt.Println(string(doc))
+}()
+```
+
+```bash
+"LayersSize": 15734442234,
+"Images": [
+        {
+            "Containers": 0,
+            "Created": 1611553539,
+            "Id": "sha256:95c13b55df1a35f9a2fe6fa6251031e26ce719c7f43d02147f037cf4d798b22f",
+            "Labels": {
+                "architecture": "x86_64",
+                "io.k8s.description": "IRIS Cloud creates, configures and helps manage K8s Clusters and IRIS installations on Kubernetes",
+                "io.k8s.display-name": "IRIS Cloud",
+                "name": "IRIS Cloud",
+                "url": "http://www.mobigen.com",
+                "vendor": "Mobigen"
+            },
+            "ParentId": "sha256:faf0929450e95c217bdb135dedac32d1ca646b6b02ce4d5211f6e9f1027aa402",
+            "RepoDigests": [
+                "repo.iris.tools/iris-cloud/iris-cloud@sha256:67483475713e40f62e802ea770b4d46883e8d4b00563369d63b70b537edf5b98"
+            ],
+            "RepoTags": [
+                "repo.iris.tools/iris-cloud/iris-cloud:v0.35.0-dev"
+            ],
+            "SharedSize": 173140144,
+            "Size": 339120350,
+            "VirtualSize": 339120350
+        },
+        {
+            현재 저장되어있는 이미지 만큼 출력
+        },
+"Containers": [
+        {
+            "Id": "f2a2fa02308be17c6a2d19ae8c68cae493c0ccc99d9e344948dc19af0a984676",
+            "Names": [
+                "/iris-cloud-mariadb"
+            ],
+            "Image": "mariadb:10.5",
+            "ImageID": "sha256:ade39f0469a3fa0e5f907e4dd7861a4e77573b0757bd4055a7b4c52baea58590",
+            "Command": "docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --lower_case_table_names=1",
+            "Created": 1611314912,
+            "Ports": [
+                {
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 3306,
+                    "PublicPort": 3306,
+                    "Type": "tcp"
+                }
+            ],
+            "SizeRw": 2035,
+            "SizeRootFs": 406527507,
+            "Labels": {},
+            "State": "running",
+            "Status": "Up 3 days",
+            "HostConfig": {
+                "NetworkMode": "default"
+            },
+            "NetworkSettings": {
+                "Networks": {
+                    "bridge": {
+                        "IPAMConfig": null,
+                        "Links": null,
+                        "Aliases": null,
+                        "NetworkID": "9b19171a2161ae3d409f0ec61f3fc1a24727e0295338622859751093ea5e6043",
+                        "EndpointID": "9102e3c93200944fe6f0fca7b676350ec52b5b43caecb6a6d4a1d17365192262",
+                        "Gateway": "172.17.0.1",
+                        "IPAddress": "172.17.0.2",
+                        "IPPrefixLen": 16,
+                        "IPv6Gateway": "",
+                        "GlobalIPv6Address": "",
+                        "GlobalIPv6PrefixLen": 0,
+                        "MacAddress": "02:42:ac:11:00:02",
+                        "DriverOpts": null
+                    }
+                }
+            },
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "/root/stats/mariadb/init-sql",
+                    "Destination": "/docker-entrypoint-initdb.d",
+                    "Mode": "",
+                    "RW": true,
+                    "Propagation": "rprivate"
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/root/stats/mariadb/data",
+                    "Destination": "/var/lib/mysql",
+                    "Mode": "",
+                    "RW": true,
+                    "Propagation": "rprivate"
+                }
+            ]
+        },
+        {
+            현재 실행중인 컨테이너 개수만큼 출력
+        },
+"Volumes": [
+        {
+            "CreatedAt": "2020-08-13T16:08:34+09:00",
+            "Driver": "local",
+            "Labels": null,
+            "Mountpoint": "/var/lib/docker/volumes/67f8e209eac7a47669a3fd507f2927592817bfb5b0dc5711f80b2018b4a8b5b8/_data",
+            "Name": "67f8e209eac7a47669a3fd507f2927592817bfb5b0dc5711f80b2018b4a8b5b8",
+            "Options": null,
+            "Scope": "local",
+            "UsageData": {
+                "RefCount": 0,
+                "Size": 0
+            }
+        },
+        {
+            현재 마운트 되어있는 볼륨 수 만큼 출력
+        },
+"BuildCache": null,
+"BuilderSize": 0
+```
+
+
+
 
 
 
