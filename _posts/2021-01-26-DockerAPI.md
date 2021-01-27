@@ -758,6 +758,28 @@ go func() {
 
 <br><br>
 
+func (*Client) VolumeInspect<br>
+docker volume inspect [volume name] 과 동일<br>
+docker volume name은 'docker volume ls' 로 얻을 수 있다. 
+
+
+```go
+go func() {
+    defer w.Done()
+    volumeinfo, err := cli.VolumeInspect(ctx, "22a58bf06feeb387ff4fdf1bbfe2572ca7b75f3ab6f14af4c5977daf9e63b1e2")
+    if err != nil {
+        panic(err)
+    }
+    doc, _ := json.MarshalIndent(volumeinfo, "", "     ")
+    fmt.Println(string(doc))
+}()
+```
+
+
+
+
+## Docker Swarm 에러
+
 func (*Client) NodeList <br>
 func (*Client) SecretListb <br>
 func (*Client) ServiceList <br>
