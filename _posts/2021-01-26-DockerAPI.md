@@ -58,7 +58,7 @@ func main() {
 아래 예시들은 go routine을 활용하였으므로 코드내에 waitGroup을 이용하여 wait 처리를 해주어야 한다. <br><br>
 
 
-func (*Client) CheckpointList<br>
+__func (*Client) CheckpointList__<br>
 특정 컨테이너의 checkpointlist return 
 
 ```go
@@ -83,7 +83,7 @@ null
 
 <br><br>
 
-func (*Client) ClientVersion<br>
+__func (*Client) ClientVersion__<br>
 client가 사용하고있는 api version return
 
 ```go
@@ -103,7 +103,7 @@ go func() {
 
 <br><br>
 
-func (*Client) ContainerDiff<br>
+__func (*Client) ContainerDiff__<br>
 container가 시작된 이후 filesystem의 변화
 
 ```go
@@ -139,7 +139,7 @@ go func() {
 
 <br><br>
 
-func (*Client) ContainerExecInspect<br>
+__func (*Client) ContainerExecInspect__<br>
 information about a specific exec process on the docker host
 
 ```go
@@ -167,7 +167,8 @@ go func() {
 ```
 
 <br><br>
-func (*Client) ContainerInspect<br>
+
+__func (*Client) ContainerInspect__<br>
 container information 리턴 
 
 ```go
@@ -387,7 +388,7 @@ go func() {
 
 <br><br>
 
-func (*Client) ContainerList<br>
+__func (*Client) ContainerList__<br>
 docker ps 와 동일
 
 ```go
@@ -409,7 +410,7 @@ go func() {
 
 <br><br>
 
-func (*Client) ContainerLogs<br>
+__func (*Client) ContainerLogs__<br>
 특정 컨테이너 로그 출력
 
 ```go
@@ -440,7 +441,7 @@ https://echo.labstack.com
 <br><br>
 
 
-func (*Client) DaemonHost<br>
+__func (*Client) DaemonHost__<br>
 host address used by the client 리턴
 
 ```go
@@ -461,7 +462,7 @@ go func() {
 
 
 
-func (*Client) DiskUsage<br>
+__func (*Client) DiskUsage__<br>
 current data usage from the daemon 리턴
 
 ```go
@@ -597,7 +598,7 @@ go func() {
 
 <br><br>
 
-func (*Client) Info<br>
+__func (*Client) Info__<br>
 current data usage from the daemon 리턴
 
 ```go
@@ -758,7 +759,7 @@ go func() {
 
 <br><br>
 
-func (*Client) VolumeInspect<br>
+__func (*Client) VolumeInspect__<br>
 docker volume inspect [volume name] 과 동일<br>
 docker volume name은 'docker volume ls' 로 얻을 수 있다. 
 
@@ -775,20 +776,35 @@ go func() {
 }()
 ```
 
+```bash
+{
+	"CreatedAt": "2021-01-11T14:09:31+09:00",
+	"Driver": "local",
+	"Labels": null,
+	"Mountpoint": "/var/lib/docker/volumes/22a58bf06feeb387ff4fdf1bbfe2572ca7b75f3ab6f14af4c5977daf9e63b1e2/_data",
+	"Name": "22a58bf06feeb387ff4fdf1bbfe2572ca7b75f3ab6f14af4c5977daf9e63b1e2",
+	"Options": null,
+	"Scope": "local"
+}
+```
 
 
+<br><br>
 
 ## Docker Swarm 에러
 
+```
 func (*Client) NodeList <br>
-func (*Client) SecretListb <br>
+func (*Client) SecretList <br>
 func (*Client) ServiceList <br>
 func (*Client) TaskList <br>
+```
 
 <br>
 
+```bash
 panic: Error response from daemon: This node is not a swarm manager. Use "docker swarm init" or "docker swarm join" to connect this node to swarm and try again.
-
+```
 
 
 
