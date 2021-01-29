@@ -2,6 +2,7 @@
 layout: post
 published: On
 title: Golang + Docker API
+category: docker
 subtitle: golang으로 docekr api 호출하여 다양한 정보 얻기
 date: '2021-01-26'
 ---
