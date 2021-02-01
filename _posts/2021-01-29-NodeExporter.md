@@ -2,6 +2,7 @@
 layout: post
 published: On
 title: Node Exporter
+category: kubernetes
 subtitle: Prometheus/Node Exporter를 이용한 모니터링
 date: '2021-01-29'
 ---
@@ -64,6 +65,24 @@ go_gc_duration_seconds_count 347477
 이하 중략
 ```
 
+<br><br>
+
+## Node Exporter Development Build
+
+<br>
+
+오픈소스를 활용하여 개발,빌드하는 방법은 대체로 동일하다.
+1. 오픈소스 프로젝트를 내 repository로 fork
+2. fork한 저장소를 로컬로 clone 하고 IDE, vi 등을 이용하여 코드를 개발한다.
+3. 해당 폴더에 Makefile(대체로 잘 작성되어있음)이 있음을 확인하고, (없다면 shell script를 작성해야함)
+4. ```bash
+    $ make build 
+    $ ./node_exporter
+    ``` 
+    로 빌드 후 실행
+
+
+<br><br>
 
 # Promethus Server
 
