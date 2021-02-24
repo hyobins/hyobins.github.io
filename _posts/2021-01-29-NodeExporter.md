@@ -84,6 +84,22 @@ go_gc_duration_seconds_count 347477
 
 <br><br>
 
+
+## Describe
+
+Describe 메소드는 이 컬렉터에 의해 수집된 metrics의 descriptors를 인자로 제공된 채널에 보낸다. return 값은 마지막 metric's descriptor가 전송되었을때 받는다. 
+
+```go
+go func() {
+    c.Describe(descChan) //describe 채널에 해당 collector c가 수집한 메트릭의 description 전송
+    close(descChan)
+}()
+
+```
+
+
+<br><br>
+
 # Promethus Server
 
 

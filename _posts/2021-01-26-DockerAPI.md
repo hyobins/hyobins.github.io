@@ -807,6 +807,11 @@ func (*Client) TaskList <br>
 panic: Error response from daemon: This node is not a swarm manager. Use "docker swarm init" or "docker swarm join" to connect this node to swarm and try again.
 ```
 
+<br><br>
+
+## CPU 사용량 계산법
+https://forums.docker.com/t/how-to-calculate-the-cpu-usage-in-percent/27509
+
 
 
 
