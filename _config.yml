@@ -18,7 +18,7 @@ navbar-links:
   Category:
     - Docker: "/category/docker"
     - Kubernetes: "/category/kubernetes"
-    - Node Exporter: "/category/nodeexporter"
+    - NodeExporter: "/category/nodeexporter"
   Author's home: "https://deanattali.com"
 
 # --- Logo --- #

@@ -1,5 +1,5 @@
 ---
 layout: category
-title: node exporter
+title: nodeexporter
 permalink: category/nodeexporter
 ---
