@@ -10,7 +10,7 @@ date: '2021-02-05'
 
 <br>
 
-<img src="../assets/img/bigPic.png">
+<img src="../assets/img/bigpic3.png">
 
 ### node_exporter.go 
 
