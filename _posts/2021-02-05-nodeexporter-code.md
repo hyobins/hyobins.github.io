@@ -3,6 +3,7 @@ layout: post
 published: On
 title: Node Exporter 소스코드 분석
 subtitle: 오픈소스 node-exporter 소스코드 분석하기
+category: nodeeexporter
 date: '2021-02-05'
 ---
 
@@ -12,9 +13,11 @@ date: '2021-02-05'
 
 <img src="../assets/img/bigpic3.png">
 
-### node_exporter.go 
+## 주요 함수 
 
-[185] kingpin cli parser로 파싱한 명령어들의 정보를 인자로 담아서 newHandler 호출. <br>
+<br>
+
+### node_exporter.go 
 
 ```go
 http.Handle(*metricsPath, newHandler(!*disableExporterMetrics, *maxRequests, logger))
