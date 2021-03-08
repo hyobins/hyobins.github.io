@@ -6,7 +6,11 @@ subtitle: 오픈소스 node-exporter 소스코드 분석하기
 date: '2021-02-05'
 ---
 
-## 흐름대로 정리 
+# Node Exporter 구조 분석
+
+<br>
+
+<img src="../assets/img/bigPic.png">
 
 ### node_exporter.go 
 
