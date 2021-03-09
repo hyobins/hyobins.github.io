@@ -1,7 +1,7 @@
 ---
 layout: post
 published: On
-title: [Node Exporter] 노드 익스포터란?
+title: Node Exporter | 노드 익스포터란?
 category: nodeexporter
 subtitle: Node Exporter를 이용한 모니터링 개념
 date: '2021-01-29'

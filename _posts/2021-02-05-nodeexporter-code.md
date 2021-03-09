@@ -1,7 +1,7 @@
 ---
 layout: post
 published: On
-title: [Node Exporter] 전체 소스코드 분석
+title: Node Exporter | 전체 소스코드 분석
 subtitle: 오픈소스 node-exporter 소스코드 분석하기
 category: nodeexporter
 date: '2021-02-05'

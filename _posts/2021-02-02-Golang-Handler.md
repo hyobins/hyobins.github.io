@@ -1,7 +1,7 @@
 ---
 layout: post
 published: On
-title: Golang Handler
+title: Go | Golang Handler
 subtitle: golang handler 패턴
 date: '2021-02-02'
 ---

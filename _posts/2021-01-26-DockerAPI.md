@@ -1,7 +1,7 @@
 ---
 layout: post
 published: On
-title: [Docker] Docker API의 go client
+title: Docker | Docker API의 go client
 category: docker
 subtitle: golang으로 docekr api 호출하여 다양한 정보 얻기
 date: '2021-01-26'
