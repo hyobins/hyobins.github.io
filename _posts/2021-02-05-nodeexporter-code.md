@@ -9,13 +9,11 @@ date: '2021-02-05'
 
 # Node Exporter 구조 분석
 
-<br>
-
 <img src="../assets/img/bigpic3.png">
 
-## 주요 함수 
-
 <br>
+
+## 주요 함수 
 
 ### node_exporter.go 
 
