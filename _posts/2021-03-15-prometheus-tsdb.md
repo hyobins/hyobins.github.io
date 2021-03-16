@@ -62,19 +62,16 @@ docker.io/petergrace/opentsdb-docker:latest
 
 # 사용법
 
-## Writing Data in OpenTSDB
+TSDB 데이터 입출력은 <b>내장된 GUI</b> 또는 <b>HTTP API</b>를 이용할 수 있다. <br>
 
-TSDB에 데이터를 쓰기 위해서는 <b>내장된 GUI</b> 또는 <b>HTTP API</b>를 이용할 수 있다. <br>
-
-### build-in GUI: 
+## Build-in GUI: 
 내장 GUI는 기본적인 read/write가 가능하며, 간단한 그래프를 보여준다.<br>
 http://localhost:4242/ 로 접속
 <img src="../assets/img/tsdbHTML.png">
 
-### HTTP API:
-Telnet / HTTP <br>
+## HTTP API:
 
-Telnet style: 
+### Telnet style(POST): 
 ```sh
 <Metric Name> <Timestamp in epoch> <Value> <tag kye>=<tag value>
 
@@ -82,14 +79,29 @@ Telnet style:
 telnet> room_temperature 1588334464 33 floor=1 room_number=10
 ```
  
-HTTP Style:
+
+
+### HTTP Style(GET/POST):<br>
+
+GET 주요 Requests<br>
+
+> [자세한 api requests](http://opentsdb.net/docs/build/html/api_http/query/index.html)
+
+|Name|필수|QS|설명 
+|--|--|--|--|
+|start|필수|start|qeury의 시작시간. <br>절대적(unix timestamp),상대적(1h-ago) 시간이 올 수 있다.  
+|queries|필수|m or tsuids|시간별 데이터를 출력하기 위해서는 하나 이상의 sub query가 필요하다. 
+
 ```sh
+#POST
 http://<ip-address-of-machine>:<port>/api/put?details
 
-
+#GET
+http://<ip-address-of-machine>:<port>/api/qeury?start=${이 시간 이후의 데이터 출력}}&m=${sub queries}
+```
 
 # Test
-아래 JSON 데이터를 POST/GET 해보기 
+아래 JSON 데이터를 POST/GET 해보기 (timestamp는 테스트 당시 시간의 unix timestamp)
 ```sh
 [
     {
@@ -122,15 +134,14 @@ http://<ip-address-of-machine>:<port>/api/put?details
 ]
 ```
 
-
-
+POST
 
 ```sh
 $ curl -X POST -H "Content-Type: application/json" -d \
 '[
     {
         "metric": "node_container_cpu_cstime",
-        "timestamp": 1615879522,
+        "timestamp": 1615879522, 
         "value": 71294,
         "tags": {
            "id": "cont1",
@@ -162,23 +173,25 @@ http://localhost:4242/api/put?details
 {"success":3,"failed":0,"errors":[]}
 ```
 
-데이터 출력 
+GET
 
 ```sh
-$ curl -X GET -H "Content-Type: application/json" "http://localhost:4242/api/query?start=1h-ago&m=max:node_container_cpu_cstime"
+#한시간 전 부터 현재까지의 데이터 중에 node_container_cpu_cstime metric의 value값 중 max 값
+$ curl -X GET -H "Content-Type: application/json" \
+"http://localhost:4242/api/query?start=1h-ago&m=max:node_container_cpu_cstime" 
 
 #parsed result
 [ 
     {
-    "metric":"node_container_cpu_cstime",
-    "tags":{},
-    "aggregateTags":[
-        "pid",
-        "id"
-    ],
-    "dps":{
-        "1615879522":71294
-    }
+        "metric":"node_container_cpu_cstime",
+        "tags":{},
+        "aggregateTags":[
+            "pid",
+            "id"
+        ],
+        "dps":{
+            "1615879522":71294
+        }
     }
 ]
 ```
