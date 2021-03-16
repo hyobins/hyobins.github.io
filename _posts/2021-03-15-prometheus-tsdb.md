@@ -16,7 +16,7 @@ date: '2021-03-15'
 Open TSDB는 컴퓨터 시스템(OS, Network, appliaction 등 )에서 수집된 metrics들을 store, index and serve 하기 위해 만들어졌다. <br>
 TSDB는 Row 기반인 관계형 데이터페이스(RDB)와 달리 Column 기반인 NoSQL Database이다. RDB와 달리 스키마가 없으므로 읽고 쓰기가 빠르고 운영 중 서버의 확장이 가능하다.<br>
 
-또한 Hbase의 확장성 덕분에 OpenTSDB는 수만 개의 호스트 및 응용 프로그램에서 수천개의 metric을 고속으로 매 초마다 수집할 수 있다. <br>이러한 대규모 데이터에 쉽게 접근할 수 있고 도식화 하기 편리하도록 만들어 졌기 때문에 모니터링에 사용하기 좋다. 
+또한 Hbase의 확장성 덕분에 OpenTSDB는 수만 개의 호스트 및 응용 프로그램에서 수천개의 metric을 고속으로 매 초마다 수집할 수 있다. <br> 대규모 데이터에 쉽게 접근할 수 있고 도식화 하기 편리하도록 만들어 졌기 때문에 모니터링에 사용하기 좋다. 
 
 <br>
 
@@ -65,29 +65,50 @@ docker.io/petergrace/opentsdb-docker:latest
 85b619f7c112f80e615e4abf86ede8ae38276d5101d9c8e28462464e8adc8dce
 ```
 
+<br>
+
 # 쿼리
 
 localhost:4242로 curl 을 날려보면 openTSDB gui 화면을 구성하는 html이 뜬다. 
 
 ```sh
-[root@k8s-dev collector]# curl localhost:4242
+[root@k8s-dev collector] curl localhost:4242
 <!DOCTYPE html><html><head><meta http-equiv=content-type content="text/html;charset=utf-8"><title>OpenTSDB</title>
 <style><!--
 body{font-family:arial,sans-serif;margin-left:2em}A.l:link{color:#6f6f6f}A.u:link{color:green}.fwf{font-family:monospace;white-space:pre-wrap}//--></style><script type=text/javascript language=javascript src=s/queryui.nocache.js></script></head>
 <body text=#000000 bgcolor=#ffffff><table border=0 cellpadding=2 cellspacing=0 width=100%><tr><td rowspan=3 width=1% nowrap><img src=s/opentsdb_header.jpg><td>&nbsp;</td></tr><tr><td><font color=#507e9b><b></b></td></tr><tr><td>&nbsp;</td></tr></table><div id=queryuimain></div><noscript>You must have JavaScript enabled.</noscript><iframe src=javascript:'' id=__gwt_historyFrame tabIndex=-1 style=position:absolute;width:0;height:0;border:0></iframe><table width=100% cellpadding=0 cellspacing=0><tr><td class=subg><img alt="" width=1 height=6></td></tr></table></body></html>
 ```
 
+<img src="../assets/img/tsdbHTML.png">
+
+<br>
+
 write 
+
 ```sh
-[root@k8s-dev ~]# curl -X POST -H "Content-Type: application/json; charset=utf-8" -d \
-> '{"metric": "sys.cpu.nice", "timestamp": 1546957946, "value": 18, "tags": {"host": "deo"}}' \
-> http://localhost:4242/api/put?details
+
+[root@k8s-dev ~] curl -X POST -H "Content-Type: application/json; charset=utf-8" -d \
+'{"metric": "sys.cpu.nice", "timestamp": 1546957946, "value": 18, "tags": {"host": "deo"}}' \
+http://localhost:4242/api/put?details
 {"success":1,"failed":0,"errors":[]}
 ```
 
 read
 ```sh
-[root@k8s-dev ~]# curl -X GET -H "Content-Type: application/json; charset=utf-8" "http://localhost:4242/api/query?start=1546957946&m=sum:sys.cpu.nice"
+[root@k8s-dev ~] curl -X GET -H "Content-Type: application/json; charset=utf-8" "http://localhost:4242/api/query?start=1546957946&m=sum:sys.cpu.nice"
+[{"metric":"sys.cpu.nice","tags":{"host":"deo"},"aggregateTags":[],"dps":{"1546957946":18}}]
+
+# parsing 
+{
+  "metric":"sys.cpu.nice",
+  "tags":{
+      "host":"deo"
+  },
+  "aggregateTags":[],
+  "dps":{
+      "1546957946":18
+  }
+}
 ```
 
 
@@ -105,9 +126,6 @@ $ ls -l gzip-32k.json
 $ curl -X POST --data-binary "@gzip-32k.json" --header "Content-Type: application/json" --header "Content-Encoding: gzip" http://mytsdb1:4242/api/put?details
 {"errors":[],"failed":0,"success":280}
 ```
-
-
-
 
 
 
