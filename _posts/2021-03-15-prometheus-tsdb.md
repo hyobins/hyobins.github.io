@@ -27,17 +27,10 @@ TSDB는 Row 기반인 관계형 데이터페이스(RDB)와 달리 Column 기반�
 수집 대상인 server에 설치된 collector 클라이언트가 TSD(Time Series Daemon)서버로 전송하면 TSD가 Hbase에 저장한다.
 OpenTSDB는 http api, web ui, telnet을 통한 읽기/쓰기를 지원한다.
 
-<br>
-
-## 기본적인 데이터 포맷
-- Metric name 
-- Unix Timestamp(Epoch)
-- a Value(int64, float, JSON)
-- A set of tags
 
 <br>
 
-# 사용법
+# 기본 설정
 
 OpenTSDB도 production level에서 사용하려면 HBase 설정이 필요하다. <br>
 > [Hbase 설정법](http://engineering.vcnc.co.kr/2013/04/hbase-configuration/)
@@ -67,19 +60,136 @@ docker.io/petergrace/opentsdb-docker:latest
 
 <br>
 
-# 쿼리
+# 사용법
 
-localhost:4242로 curl 을 날려보면 openTSDB gui 화면을 구성하는 html이 뜬다. 
+## Writing Data in OpenTSDB
 
+TSDB에 데이터를 쓰기 위해서는 <b>내장된 GUI</b> 또는 <b>HTTP API</b>를 이용할 수 있다. <br>
+
+### build-in GUI: 
+내장 GUI는 기본적인 read/write가 가능하며, 간단한 그래프를 보여준다.<br>
+http://localhost:4242/ 로 접속
+<img src="../assets/img/tsdbHTML.png">
+
+### HTTP API:
+Telnet / HTTP <br>
+
+Telnet style: 
 ```sh
-[root@k8s-dev collector] curl localhost:4242
-<!DOCTYPE html><html><head><meta http-equiv=content-type content="text/html;charset=utf-8"><title>OpenTSDB</title>
-<style><!--
-body{font-family:arial,sans-serif;margin-left:2em}A.l:link{color:#6f6f6f}A.u:link{color:green}.fwf{font-family:monospace;white-space:pre-wrap}//--></style><script type=text/javascript language=javascript src=s/queryui.nocache.js></script></head>
-<body text=#000000 bgcolor=#ffffff><table border=0 cellpadding=2 cellspacing=0 width=100%><tr><td rowspan=3 width=1% nowrap><img src=s/opentsdb_header.jpg><td>&nbsp;</td></tr><tr><td><font color=#507e9b><b></b></td></tr><tr><td>&nbsp;</td></tr></table><div id=queryuimain></div><noscript>You must have JavaScript enabled.</noscript><iframe src=javascript:'' id=__gwt_historyFrame tabIndex=-1 style=position:absolute;width:0;height:0;border:0></iframe><table width=100% cellpadding=0 cellspacing=0><tr><td class=subg><img alt="" width=1 height=6></td></tr></table></body></html>
+<Metric Name> <Timestamp in epoch> <Value> <tag kye>=<tag value>
+
+#Example
+telnet> room_temperature 1588334464 33 floor=1 room_number=10
+```
+ 
+HTTP Style:
+```sh
+http://<ip-address-of-machine>:<port>/api/put?details
+
+
+
+# Test
+아래 JSON 데이터를 POST/GET 해보기 
+```sh
+[
+    {
+        "metric": "node_container_cpu_cstime",
+        "timestamp": 1615879522,
+        "value": 71294,
+        "tags": {
+           "id": "cont1",
+           "pid": "319"
+        }
+    },
+    {
+        "metric": "node_container_cpu_cstime",
+        "timestamp": 1615879522,
+        "value": 150,
+        "tags": {
+           "id": "cont2",
+           "pid": "345"
+        }
+    },
+    {
+        "metric": "node_container_cpu_cutime",
+        "timestamp": 1615879522,
+        "value": 2,
+        "tags": {
+           "id": "cont1",
+           "pid": "319"
+        }
+    }
+]
 ```
 
-<img src="../assets/img/tsdbHTML.png">
+
+
+
+```sh
+$ curl -X POST -H "Content-Type: application/json" -d \
+'[
+    {
+        "metric": "node_container_cpu_cstime",
+        "timestamp": 1615879522,
+        "value": 71294,
+        "tags": {
+           "id": "cont1",
+           "pid": "319"
+        }
+    },
+    {
+        "metric": "node_container_cpu_cstime",
+        "timestamp": 1615879522,
+        "value": 150,
+        "tags": {
+           "id": "cont2",
+           "pid": "345"
+        }
+    },
+    {
+        "metric": "node_container_cpu_cutime",
+        "timestamp": 1615879522,
+        "value": 2,
+        "tags": {
+           "id": "cont1",
+           "pid": "319"
+        }
+    }
+]' \
+http://localhost:4242/api/put?details
+
+# 결과값
+{"success":3,"failed":0,"errors":[]}
+```
+
+데이터 출력 
+
+```sh
+$ curl -X GET -H "Content-Type: application/json" "http://localhost:4242/api/query?start=1h-ago&m=max:node_container_cpu_cstime"
+
+#parsed result
+[ 
+    {
+    "metric":"node_container_cpu_cstime",
+    "tags":{},
+    "aggregateTags":[
+        "pid",
+        "id"
+    ],
+    "dps":{
+        "1615879522":71294
+    }
+    }
+]
+```
+
+
+
+
+# 쿼리
+
+localhost:4242로 curl 을 날려보면 openTSDB gui 화면을 구성하는 html이 뜬다.
+
 
 <br>
 
@@ -111,6 +221,15 @@ read
 }
 ```
 
+<br>
+
+# Query API Endpoints
+
+
+
+
+
+
 
 
 Request 압축 예시
@@ -137,3 +256,7 @@ $ curl -X POST --data-binary "@gzip-32k.json" --header "Content-Type: applicatio
 
 go에서는 OpenTSDB 서버와 상호작용하기위한 패키지를 제공한다. [링크](https://pkg.go.dev/bosun.org/opentsdb)
 
+
+
+# 참고 사이트
+(https://medium.com/analytics-vidhya/understanding-opentsdb-a-distributed-and-scalable-time-series-database-e4efc7a3dbb7)
