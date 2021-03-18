@@ -1,9 +1,9 @@
 ---
 layout: post
 published: On
-title: Prometheus | TSDB
+title: Prometheus | OpenTSDB
 category: monitoring
-subtitle: 모니터링을 위한 시계열 데이터베이스 TSDB 
+subtitle: 모니터링을 위한 시계열 데이터베이스 TSDB - OpenTSDB
 date: '2021-03-15'
 ---
 
@@ -32,30 +32,14 @@ OpenTSDB는 http api, web ui, telnet을 통한 읽기/쓰기를 지원한다.
 
 # 기본 설정
 
-OpenTSDB도 production level에서 사용하려면 HBase 설정이 필요하다. <br>
-> [Hbase 설정법](http://engineering.vcnc.co.kr/2013/04/hbase-configuration/)
-
-<br>
+OpenTSDB도 production level에서 사용하려면 HBase 설정 [(Hbase 설정법)](http://engineering.vcnc.co.kr/2013/04/hbase-configuration/)이 필요하다. <br>
 여기서는 개발 및 학습 목적으로서 docker 컨테이너로 띄워 보자. <br>
-docker hub에서 open tsdb를 검색하면 가장 많이 사용되는 container를 다운받아서 실행할 수 있다. 
-
-> [링크](https://hub.docker.com/r/petergrace/opentsdb-docker/)
+docker hub에서 open tsdb를 검색하면 가장 많이 사용되는 container를 다운[(링크)](https://hub.docker.com/r/petergrace/opentsdb-docker/)받아서 실행할 수 있다. 
 
 
 ```sh
-[root@k8s-dev ]# docker pull petergrace/opentsdb-docker
-Using default tag: latest
-latest: Pulling from petergrace/opentsdb-docker
-188c0c94c7c5: Pull complete
-0482a7a172c0: Pull complete
-1838cd58688f: Pull complete
-...
-b7313d7365bd: Pull complete
-Digest: sha256:05d396f19800260c9bcfc918dbab97c289cf5f94cd90abed03adb357244516f0
-Status: Downloaded newer image for petergrace/opentsdb-docker:latest
-docker.io/petergrace/opentsdb-docker:latest
-[root@k8s-dev ]# docker run -dp 4242:4242 petergrace/opentsdb-docker
-85b619f7c112f80e615e4abf86ede8ae38276d5101d9c8e28462464e8adc8dce
+$ docker pull petergrace/opentsdb-docker
+$ docker run -dp 4242:4242 petergrace/opentsdb-docker
 ```
 
 <br>
@@ -69,8 +53,9 @@ TSDB 데이터 입출력은 <b>내장된 GUI</b> 또는 <b>HTTP API</b>를 이�
 http://localhost:4242/ 로 접속
 <img src="../assets/img/tsdbHTML.png">
 
-## HTTP API:
+<br>
 
+## HTTP API:
 ### Telnet style(POST): 
 ```sh
 <Metric Name> <Timestamp in epoch> <Value> <tag kye>=<tag value>
@@ -83,14 +68,16 @@ telnet> room_temperature 1588334464 33 floor=1 room_number=10
 
 ### HTTP Style(GET/POST):<br>
 
-GET 주요 Requests<br>
-
-> [자세한 api requests](http://opentsdb.net/docs/build/html/api_http/query/index.html)
+Endpoint "/api/query" 의 주요 Requests<br>
 
 |Name|필수|QS|설명 
 |--|--|--|--|
 |start|필수|start|qeury의 시작시간. <br>절대적(unix timestamp),상대적(1h-ago) 시간이 올 수 있다.  
 |queries|필수|m or tsuids|시간별 데이터를 출력하기 위해서는 하나 이상의 sub query가 필요하다. 
+
+<br>
+
+> [자세한 api requests](http://opentsdb.net/docs/build/html/api_http/query/index.html)
 
 ```sh
 #POST
@@ -99,6 +86,8 @@ http://<ip-address-of-machine>:<port>/api/put?details
 #GET
 http://<ip-address-of-machine>:<port>/api/qeury?start=${이 시간 이후의 데이터 출력}}&m=${sub queries}
 ```
+
+<br>
 
 # Test
 아래 JSON 데이터를 POST/GET 해보기 (timestamp는 테스트 당시 시간의 unix timestamp)
@@ -195,53 +184,6 @@ $ curl -X GET -H "Content-Type: application/json" \
     }
 ]
 ```
-
-
-
-
-# 쿼리
-
-localhost:4242로 curl 을 날려보면 openTSDB gui 화면을 구성하는 html이 뜬다.
-
-
-<br>
-
-write 
-
-```sh
-
-[root@k8s-dev ~] curl -X POST -H "Content-Type: application/json; charset=utf-8" -d \
-'{"metric": "sys.cpu.nice", "timestamp": 1546957946, "value": 18, "tags": {"host": "deo"}}' \
-http://localhost:4242/api/put?details
-{"success":1,"failed":0,"errors":[]}
-```
-
-read
-```sh
-[root@k8s-dev ~] curl -X GET -H "Content-Type: application/json; charset=utf-8" "http://localhost:4242/api/query?start=1546957946&m=sum:sys.cpu.nice"
-[{"metric":"sys.cpu.nice","tags":{"host":"deo"},"aggregateTags":[],"dps":{"1546957946":18}}]
-
-# parsing 
-{
-  "metric":"sys.cpu.nice",
-  "tags":{
-      "host":"deo"
-  },
-  "aggregateTags":[],
-  "dps":{
-      "1546957946":18
-  }
-}
-```
-
-<br>
-
-# Query API Endpoints
-
-
-
-
-
 
 
 
