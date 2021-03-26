@@ -1,7 +1,7 @@
 ---
 layout: post
 published: On
-title: Prometheus | InfluxDB Query Example
+title: TSDB | InfluxDB Query Example
 category: monitoring
 subtitle: InfluxDB - Query 응용 예시 정리
 date: '2021-03-23'

@@ -1,7 +1,7 @@
 ---
 layout: post
 published: On
-title: Prometheus | OpenTSDB
+title: TSDB | OpenTSDB
 category: monitoring
 subtitle: 모니터링을 위한 시계열 데이터베이스 TSDB - OpenTSDB
 date: '2021-03-15'

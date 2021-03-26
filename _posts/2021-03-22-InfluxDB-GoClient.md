@@ -1,7 +1,7 @@
 ---
 layout: post
 published: On
-title: Prometheus | InfluxDB Go Client
+title: TSDB | InfluxDB Go Client
 category: monitoring
 subtitle: InfluxDB - Go Client 활용
 date: '2021-03-22'
@@ -239,11 +239,15 @@ Time: 2021-03-24 01:46:13.29579993 +0000 UTC
 ContainerName: name13   |   utime + stime: 0.11503004905526187
 ```
 
+<br>
+
 ## Result Data 접근
+
 ```go
 result.Record().${아래 요소}
 ```
 
+<br>
 
 |함수| Parameter | Output type | 설명
 |--|--|--|--|
@@ -253,6 +257,8 @@ result.Record().${아래 요소}
 |Value||interface{}| Field의 Value값 리턴, <br> _value column의 값이 존재하지 않을 시 nil 리턴
 |Values||map[string]interface{}| 기본 output table 전체 값 리턴
 |ValueByKey|Key값(string)|interface{}| ```Values()```의 리턴값에서 indexing
+
+<br>
 
 ```sh
 Field       m func() string 
@@ -267,5 +273,3 @@ Values      m func() map[string]interface{}
 ValueByKey  m func(key string) interface{}
 ```
 
-주요 field 설명 <br>
-result.Record.Field()
