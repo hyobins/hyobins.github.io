@@ -251,8 +251,8 @@ result.Record().${아래 요소}
 
 |함수| Parameter | Output type | 설명
 |--|--|--|--|
-|Field||string| output table의 field 값 리턴 <br> 한 table에 다수 field가 존재할 시(pivot()) nil return(Type Error)
-|Measurement||string| output table의 measurement 값 리턴<br> Measurement 가 다수 존재할 시 nil return(Type Error)
+|Field||string| output table의 field 값 리턴 <!--<br> 한 table에 다수 field가 존재할 시(pivot()) nil return(Type Error)-->
+|Measurement||string| output table의 measurement 값 리턴<!--<br> Measurement 가 다수 존재할 시 nil return(Type Error) -->
 |Start, Stop, Time||time.Time| 해당 데이터의 조회 시작/조회 끝/입력 시간 
 |Value||interface{}| Field의 Value값 리턴, <br> _value column의 값이 존재하지 않을 시 nil 리턴
 |Values||map[string]interface{}| 기본 output table 전체 값 리턴
