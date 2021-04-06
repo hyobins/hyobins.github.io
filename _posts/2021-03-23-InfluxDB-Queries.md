@@ -14,7 +14,7 @@ date: '2021-03-23'
 
 ## filter() functions
 ```filter()``` 사용시 요청한 measurement의 특정 필드 값만 리턴받을 수 있다. <br>
-이때 ```or``` 을 사용하여 여러 필드를 가져올 수 있다. 여러 필드를 호출하더라도 하나의 테이블은 하나의 value만 가진다.  <br>
+이때 ```or``` 을 사용하여 여러 필드를 가져올 수 있다. 여러 필드를 호출하더라도 output은 하나의 field key-value 쌍을 출력한다. <br>
 즉 아래와 같이 A or B field를 호출하면 2개의 field에 대한 2개의 테이블이 출력된다. 
 
 ```sh
