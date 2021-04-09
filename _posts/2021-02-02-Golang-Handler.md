@@ -65,7 +65,17 @@ func (h *testHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 ListenAndServe() 메서드는 지정된 포트에 웹 서버를 열고 클라이언트 Request를 받아들여 새 go 루틴에 작업을 할당하는 일을 한다. <b>첫번째 파라미터</b>로는 해당 경로에서 Request를 Listen 할 것인지를 정하고, <b>두번째는</b> 어떤 ServeMux(또는 ServeHTTP)를 사용할 지를 지정하는데 nil의 경우 DefaultServeMux를 사용한다. <br>
 
-<details><summary>보충설명</summary>
+> ServeMux는 기본적으로 HTTP Request Router(혹은 Multiplexor)인데, 일반적으로 내장된 DefaultServeMux을 사용하지만, 개발자가 별도로 ServeMux를 만들어 Routing 부분을 세밀하게 제어할 수도 있다).
+
+```go
+http.ListenAndServe(":5000", nil) //DefaultServeMux 사용
+http.ListenAndServe("localhost:8080", db) //ServeHTTP 메서드를 가진 handler 구조체
+http.ListenAndServe("localhost:8000", mux) //ServeMux 메서드를 가진 handler 구조체
+```
+
+<br><br>
+
+### 보충설명
 
 ```sh
 func ListenAndServe(addr string, handler Handler) error
@@ -82,20 +92,10 @@ type Handler interface {
 
 Handler는 interface이며 ServeHTTP를 가지고 있음을 확인할 수 있다. 
 
-</details>
-
-<br>
-
-> ServeMux는 기본적으로 HTTP Request Router(혹은 Multiplexor)인데, 일반적으로 내장된 DefaultServeMux을 사용하지만, 개발자가 별도로 ServeMux를 만들어 Routing 부분을 세밀하게 제어할 수도 있다).
-
-```go
-http.ListenAndServe(":5000", nil) //DefaultServeMux 사용
-http.ListenAndServe("localhost:8080", db) //ServeHTTP 메서드를 가진 handler 구조체
-http.ListenAndServe("localhost:8000", mux) //ServeMux 메서드를 가진 handler 구조체
-```
-
-
 <br><br>
+
+
+## 예제
 
 다음은 가장 기본적인 Go based web server 이다.
 
